@@ -7,18 +7,23 @@ ENTRY_POINT = ""
 def index():
   return render_template('index.html')
 
-
-
 @app.route('/settings')
 def settings():
-    return render_template('settings.html')
+  return render_template('settings.html')
 
-@app.route('/todo <name_of_task>')
+@app.route('/todo/<name_of_task>')
+def showTask(task_id):
+  query = "SELECT * FROM tasks WHERE completed = 0 AND task_id =" + task_id + ";"
+
 def todo():
-    return render_template('todo.html')
 
 
-@app.route('/completed <name_of_task>')
+
+
+  return render_template('todo.html')
+
+
+@app.route('/completed/<name_of_task>')
 def completed():
     return render_template('completed.html')
 
