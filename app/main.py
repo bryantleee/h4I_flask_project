@@ -1,9 +1,21 @@
 from flask import Flask, render_template, url_for, session
-app = Flask(__name__)
-
+from flask_sqlalchemy import SQLAlchemy
 from models import todo
 
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
+db = SQLAlchemy(app)
+
+
 ENTRY_POINT = ""
+
+# check me
+# class Task(db.Model):
+#   id = db.Column(db.Integer, nullable=False, primary_key = True)
+#   task_name = db.column(db.String(64), nullable=False)
+#   description = db.column(db.String(64), nullable = False)
+#   date=db.column(db.DateTime(timezone=True), nullable=False)
+#   completed=db.column(db.Integer, nullable =False)
 
 @app.route(ENTRY_POINT + '/', methods=['GET'])
 def index():
@@ -20,10 +32,6 @@ def showTask(task_id):
   query = "SELECT * FROM tasks WHERE completed = 0 AND task_id =" + task_id + ";"
 
 def todo():
-
-
-
-
   return render_template('todo.html')
 
 
