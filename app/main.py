@@ -1,8 +1,6 @@
 from flask import Flask, render_template, url_for, session
 app = Flask(__name__)
 
-from models import todo
-
 ENTRY_POINT = ""
 
 @app.route(ENTRY_POINT + '/', methods=['GET'])
@@ -18,19 +16,18 @@ def settings():
 @app.route('/todo/<name_of_task>')
 def showTask(task_id):
   query = "SELECT * FROM tasks WHERE completed = 0 AND task_id =" + task_id + ";"
-
-def todo():
-
-
-
-
-  return render_template('todo.html')
-
+  if query is None:
+    return index()
+  else:
+    return render_template('todo.html', title=query.task_name, description=query.description, date=query.date)
 
 @app.route('/completed/<name_of_task>')
-def completed():
-    return render_template('completed.html')
-
+def completed(task_id):
+  query = "SELECT * FROM tasks WHERE completed = 1 AND task_id =" + task_id + ";"
+  if query is None:
+    return index()
+  else:
+    return render_template('completed.html', title=query.task_name, description=query.description, date=query.date)
 
 if __name__ == "__main__":
     app.run(debug=True)
