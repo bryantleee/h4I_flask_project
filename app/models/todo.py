@@ -1,6 +1,5 @@
 import db
 
-
 class todo(db.Model):
     __tablename__ = 'tasks'
     id = db.Column(db.Integer, nullable=False, primary_key = True)
