@@ -1,11 +1,9 @@
 from flask import Flask, render_template, url_for, session
 from flask_sqlalchemy import SQLAlchemy
-from models import todo
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
 db = SQLAlchemy(app)
-
 
 ENTRY_POINT = ""
 
