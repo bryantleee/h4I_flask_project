@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, session, request
+from flask import Flask, render_template, url_for, session, request, redirect, jsonify, url_for
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -21,17 +21,23 @@ ENTRY_POINT = ""
 
 @app.route(ENTRY_POINT + '/', methods=['POST'])
 def index():
-  data = request.form
-
-  #TODO: add data to DB
-
-  incompleted = db.session.query(todo).filter_by(completed=0).all()
-  completed = db.session.query(todo).filter_by(completed=1).all()
+  incompleted = session.query(Tasks).filter_by(completed=0).all()
+  completed = session.query(Tasks).filter_by(completed=1).all()
   return render_template('index.html', incomplete_tasks=incompleted, completed_tasks=completed)
 
 @app.route('/settings')
 def settings():
   return render_template('settings.html')
+
+@app.route('/new')
+def newtask():
+  if request.method == 'POST':
+      newTask = Tasks(task_name=request.form['task_name'], description=request.form['description'], date=request.form['date'], completed=0)
+      session.add(newTask)
+      session.commit()
+      return redirect(url_for('/new'))
+  else:
+      return render_template('add_task.html')
 
 @app.route('/todo/<name_of_task>', methods=['POST'])
 def showTask(task_id):
