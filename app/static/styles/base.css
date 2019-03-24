@@ -1,3 +1,27 @@
 nav{
     background-color: gray;
 }
+
+th, td {
+    text-align: center;
+    background-color: white;
+    padding-top: 5px;
+    padding-left: 1px;
+    padding-right: 1px;
+
+}
+th{
+    background-color: rgb(190, 188, 188);
+}
+td{
+    padding-bottom: 5px;
+}
+
+table{
+    background-color: black;
+    margin: auto;
+    max-width: 1000px;
+    margin-bottom: 100px;
+    border-radius: 3px;
+
+}
