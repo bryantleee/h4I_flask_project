@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, session
+from flask import Flask, render_template, url_for, session, request
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -19,10 +19,14 @@ session = DBSession()
 
 ENTRY_POINT = ""
 
-@app.route(ENTRY_POINT + '/', methods=['GET'])
+@app.route(ENTRY_POINT + '/', methods=['POST'])
 def index():
-  incompleted = session.query(Tasks).filter_by(completed=0).all()
-  completed = session.query(Tasks).filter_by(completed=1).all()
+  data = request.form
+
+  #TODO: add data to DB
+
+  incompleted = db.session.query(todo).filter_by(completed=0).all()
+  completed = db.session.query(todo).filter_by(completed=1).all()
   return render_template('index.html', incomplete_tasks=incompleted, completed_tasks=completed)
 
 @app.route('/settings')
