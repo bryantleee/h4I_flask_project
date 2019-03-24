@@ -11,11 +11,8 @@
     {% include "page_blocks/navigation.html" %}
 
     <h1> Tasks! </h1>
-    <form action="http://localhost:8000/" class= "add_task_form" method = "post">
-        <input class="add_task_name" type = "text" name ="task_name" placeholder="Add Task Name">
-        <textarea placeholder="Add Task Description" rows="4" cols="50"></textarea>
-        <button type="submit"> Add Task </button>
-    </form> 
+
+    
 
   <!-- "todo" table -->
     <table class = "todo">
@@ -33,8 +30,6 @@
     </tr>
     {% endfor %}
     </table>
-
-
 
 
   <!-- "completed" table -->
