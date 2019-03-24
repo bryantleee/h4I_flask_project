@@ -1,52 +1,47 @@
 from flask import Flask, render_template, url_for, session
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relationship
+from init_db import Tasks
 
+Base = declarative_base()
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
 db = SQLAlchemy(app)
 
-ENTRY_POINT = ""
+engine = create_engine('sqlite:///tasks.db')
+Base.metadata.bind = engine
 
-# check me
-# class Task(db.Model):
-#   id = db.Column(db.Integer, nullable=False, primary_key = True)
-#   task_name = db.column(db.String(64), nullable=False)
-#   description = db.column(db.String(64), nullable = False)
-#   date=db.column(db.DateTime(timezone=True), nullable=False)
-#   completed=db.column(db.Integer, nullable =False)
+DBSession = sessionmaker(bind=engine)
+session = DBSession()
+
+ENTRY_POINT = ""
 
 @app.route(ENTRY_POINT + '/', methods=['GET'])
 def index():
-  incompleted = db.session.query(todo).filter_by(completed=0).all()
-  completed = db.session.query(todo).filter_by(completed=1).all()
+  incompleted = session.query(Tasks).filter_by(completed=0).all()
+  completed = session.query(Tasks).filter_by(completed=1).all()
   return render_template('index.html', incomplete_tasks=incompleted, completed_tasks=completed)
 
 @app.route('/settings')
 def settings():
   return render_template('settings.html')
 
-@app.route('/todo/<name_of_task>')
+@app.route('/todo/<name_of_task>', methods=['POST'])
 def showTask(task_id):
-  query = "SELECT * FROM tasks WHERE completed = 0 AND task_id =" + task_id + ";"
-
-def todo():
-  return render_template('todo.html')
-
-  if query is None:
-    return index()
-  else:
-    return render_template('todo.html', title=query.task_name, description=query.description, date=query.date)
+  task = session.query(Tasks).filter_by(id=task_id)
+  return render_template('task.html', task=task)
 
 @app.route('/completed/<name_of_task>')
 def completed(task_id):
-  query = "SELECT * FROM tasks WHERE completed = 1 AND task_id =" + task_id + ";"
-  if query is None:
-    return index()
-  else:
-    return render_template('completed.html', title=query.task_name, description=query.description, date=query.date)
+  task = session.query(Tasks).filter_by(id=task_id)
+  return render_template('completed.html', task=task)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.debug=True
+    app.run(host='0.0.0.0', port = 8000)
 
 
 
